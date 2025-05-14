@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản đồ địa chỉ đỏ tỉnh Bình Thuận</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" referrerpolicy="no-referrer" />
+    <style>
+        /* ... Các kiểu dáng CSS hiện tại của bạn ... */
+    
+        #footer p {
+            margin-bottom: 3px; /* Giảm khoảng cách giữa các đoạn văn */
+        }
+    
+        #footer p:last-child {
+            font-size: 0.8em; /* Chữ nhỏ hơn */
+            color: #868e96; /* Màu xám nhạt hơn */
+            margin-bottom: 0; /* Loại bỏ margin bottom ở dòng cuối */
+        }
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <img src="images/banner.jpg" alt="bản đồ số địa chỉ đỏ Bình Thuận">
+    </div>
+   <div id="button-container">
+    <a href="/" id="home-button" class="nav-button"><i class="fas fa-home"></i> Home</a>
+    <a href="#" id="about-button" class="nav-button"><i class="fas fa-info-circle"></i> Giới thiệu</a>
+    <a href="#" id="contact-button" class="nav-button"><i class="fas fa-envelope"></i> Liên hệ</a>
+    <span id="current-date-menu" class="nav-button"></span>
+</div>
+<div id="about-popup" class="popup">
+    <div class="popup-header">
+        <h2 class="popup-title">Giới thiệu "Bản đồ số địa chỉ đỏ tỉnh Bình Thuận"</h2>
+        <span class="close-button">&times;</span>
+    </div>
+    <div class="popup-content">
+        <p>Nhằm giáo dục lý tưởng cách mạng, tiếp nối truyền thống “Uống nước nhớ nguồn” tốt đẹp của quê hương, đất nước cho đoàn viên thanh niên, cũng như ứng dụng công nghệ thông tin trong thời đại công nghệ 4.0, chào mừng Đại hội Đảng các cấp và Đại hội Đảng bộ tỉnh nhiệm kỳ 2025 - 2030, Ban Thường vụ Tỉnh đoàn triển khai xây dựng bản đồ số các địa chỉ đỏ tỉnh Bình Thuận.</p>
+        <p>Bản đồ số bao gồm các địa danh lịch sử, khu căn cứ cách mạng, địa chỉ đỏ tại các địa phương trong tỉnh. Đối với các địa danh trên, đoàn viên thanh niên sẽ được tiếp cận gần hơn với các hình ảnh, sự kiện ghi dấu một thời kỳ dựng nước và giữ nước anh dũng của thế hệ cha anh, cảm nhận rõ hơn sự bất khuất, kiên cường cùng với những vất vả và hi sinh anh dũng của những người đi trước, qua đó góp phần giáo dục lớp trẻ về tình yêu quê hương đất nước, trân trọng quá khứ hào hùng và yêu chuộng hòa bình trong thời nay.</p>
+        <p>Xây dựng bản đồ số cung cấp cho đoàn viên thanh niên một công cụ tìm kiếm giúp tìm hiểu cụ thể hơn nguồn gốc, ý nghĩa lịch sử của các địa danh, đưa các địa danh đến gần hơn với người dân và trở thành những địa chỉ đỏ tin cậy, tạo điểm đến thường xuyên hơn cho thanh thiếu nhi trong các buổi sinh hoạt chi đoàn, dịp kết nạp đoàn viên, đảng viên và trong các ngày lễ lớn của quê hương, đất nước.</p>
+        <p>Cùng với đó, việc xây dựng bản đồ số nhằm nâng cao tinh thần trách nhiệm của giới trẻ về gìn giữ, bảo vệ địa danh lịch sử; và mong muốn nhận được nhiều hơn nữa sự quan tâm, hỗ trợ nâng cấp, bảo tồn của các cơ quan, đơn vị, tổ chức trong và ngoài tỉnh.</p>
+    </div>
+</div>
+<div id="contact-popup" class="popup">
+    <div class="popup-header">
+        <h2 class="popup-title">Thông tin liên hệ</h2>
+        <span class="close-button">&times;</span>
+    </div>
+    <div class="popup-content">
+        <p>Bạn có thể liên hệ với chúng tôi qua các kênh sau:</p>
+        <ul>
+            <li>Email: <a href="mailto:[tdbt@gmail.com]">[tdbt@gmail.com]</a></li>
+            <li>Điện thoại: [0252.3822 798]</li>
+            <li>Địa chỉ: [Tỉnh đoàn Bình Thuận], Đường Tôn Đức Thắng, Xuân An, Phan Thiết, Bình Thuận</li>
+        </ul>
+        <p>Chúng tôi luôn sẵn lòng hỗ trợ bạn!</p>
+    </div>
+</div>
+<div class="popup-overlay"></div>
+    <div id="content">
+        <div id="sidebar" id="sidebar">
+            <h3>Chọn địa phương</h3>
+            <div class="location-buttons">
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="TuyPhong">Tuy Phong</button>
+                    <ul class="location-details" data-region-details="TuyPhong"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="BacBinh">Bắc Bình</button>
+                    <ul class="location-details" data-region-details="BacBinh"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="HamThuanBac">Hàm Thuận Bắc</button>
+                    <ul class="location-details" data-region-details="HamThuanBac"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="PhanThiet">Phan Thiết</button>
+                    <ul class="location-details" data-region-details="PhanThiet"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="HamThuanNam">Hàm Thuận Nam</button>
+                    <ul class="location-details" data-region-details="HamThuanNam"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="HamTan">Hàm Tân</button>
+                    <ul class="location-details" data-region-details="HamTan"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="Lagi">Lagi</button>
+                    <ul class="location-details" data-region-details="Lagi"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="TanHinh">Tánh Linh</button>
+                    <ul class="location-details" data-region-details="TanHinh"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="DucLinh">Đức Linh</button>
+                    <ul class="location-details" data-region-details="DucLinh"></ul>
+                </div>
+                <div class="location-button-wrapper">
+                    <button class="location-button" data-region="PhuQuy">Phú Quý</button>
+                    <ul class="location-details" data-region-details="PhuQuy"></ul>
+                </div>
+                
+            </div>
+        </div>
+
+        <div id="map">
+
+
+            
+        </div>
+
+       
+
+
+    </div>
+
+    <div id="footer">
+        <p>&copy; 2025 Tỉnh đoàn Bình Thuận.</p>
+        <p> Xây dựng và phát triển bởi Trương Minh Quang</p>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
